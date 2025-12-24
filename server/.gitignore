@@ -1,0 +1,69 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# --- Django ---
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# If you collect static into a folder named "static/"
+# (uncomment if you use it and don't want to track it)
+# static/
+
+# Django migrations (usually you DO track migrations!)
+# **Do NOT ignore migrations** unless you know what you're doing.
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# --- Environment / secrets ---
+.env
+.env.*
+*.env
+*.pem
+*.key
+
+# --- Virtualenv ---
+venv/
+.venv/
+env/
+ENV/
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# --- Testing / coverage ---
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+coverage.xml
+
+# --- Packaging ---
+build/
+dist/
+*.egg-info/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- Node (if you have frontend assets) ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Cache / temp ---
+*.tmp
+*.temp
+.cache/
