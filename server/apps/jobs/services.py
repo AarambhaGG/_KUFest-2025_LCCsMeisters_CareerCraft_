@@ -8,7 +8,7 @@ from typing import Dict, Any, List, Optional
 from decimal import Decimal
 
 from langchain_openai import ChatOpenAI
-from langchain_gemini import Gemini
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 
 from django.conf import settings
@@ -42,7 +42,7 @@ class DreamJobParser:
 
         if model_provider == "gemini":
             gemini_api_key = os.getenv("GEMINI_API_KEY")
-            self.llm = Gemini(model=gemini_model, api_key=gemini_api_key)
+            self.llm = ChatGoogleGenerativeAI(model=gemini_model, api_key=gemini_api_key)
         else:
             self.llm = ChatOpenAI(
                 model=openai_model,

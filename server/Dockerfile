@@ -19,15 +19,15 @@ COPY requirements.txt /app/
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
+# Copy entrypoint script first
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 # Copy project
 COPY . /app/
-
-# Copy entrypoint script
-COPY entrypoint.sh /app/
-RUN chmod +x /app/entrypoint.sh
 
 # Expose port
 EXPOSE 8000
 
 # Set entrypoint
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]
