@@ -1,10 +1,11 @@
-CareerCraft – AI Career Gap Analyzer
+CareerCraft – AI Career Gap Analyser
 "Know Your Gap. Close Your Gap."
 
 🎯 The Problem
-Job seekers apply blindly without knowing if they're qualified. Result: wasted time, unclear skill gaps, and no clear path forward.
+Job seekers apply blindly without knowing if they're qualified. 
+Result: wasted time, unclear skill gaps, and no clear path forward.
 💡 Our Solution
-CareerCraft uses AI to analyze your profile against your dream job, tells you if you're FIT or UNFIT, and gives you a personalized week-by-week roadmap to get job-ready.
+CareerCraft uses AI to analyse your profile against your dream job, tells you if you're FIT or UNFIT, and gives you a personalised week-by-week roadmap to get job-ready.
 
 🔄 How It Works
 📄 Upload Resume → 🎯 Enter Dream Job → 🤖 AI Analyzes Gap → ✅ Get FIT/UNFIT Status → 🗺️ Receive Personalized Roadmap
@@ -14,7 +15,7 @@ Output: Clear eligibility + actionable learning path
 
 ✨ Key Features
 
-Smart Parsing: Extracts skills, experience, education from resumes
+Smart Parsing: Extracts skills, experience, and education from resumes
 Semantic Matching: AI understands skill relationships (not just keywords)
 Gap Analysis: Identifies missing critical & preferred skills
 FIT/UNFIT Assessment: Clear yes/no with confidence score
@@ -23,8 +24,8 @@ Custom Roadmap: Week-by-week plan to close skill gaps
 
 🌍 Why Open Innovation?
 ✅ Problem-First Approach: Solves universal career confusion
-✅ Democratizes Access: Career guidance for everyone, not just privileged few
-✅ Multi-Stakeholder Impact: Helps job seekers, employers, educators
+✅ Democratizes Access: Career guidance for everyone, not just the privileged few
+✅ Multi-Stakeholder Impact: Helps job seekers, employers and educators
 ✅ Scalable Across Domains: Works for any industry, role, or region
 
 
@@ -39,5 +40,4 @@ For Educators: Understand real market skill gaps
 🔗 LinkedIn integration | 📊 Progress tracking | 📝 Resume optimization | 🎤 Interview prep insights
 
 🛠️ Tech Stack
-AI/ML: NLP (skill extraction), Semantic matching, LLMs (roadmap generation)
-Backend: Python/Node.js | Frontend: Web interface | Database: User profiles & analysis
+|Backend: Python/Django | Frontend: Next.js |
