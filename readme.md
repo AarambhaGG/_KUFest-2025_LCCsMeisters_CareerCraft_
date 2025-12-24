@@ -1,0 +1,1 @@
+CareerCraft is an AI-powered platform that analyses the gap between your current skills and your dream job requirements. It tells you if you're job-ready (FIT or UNFIT), shows exactly what skills you're missing, and creates a personalised week-by-week roadmap to help you bridge those gaps and land the job.
