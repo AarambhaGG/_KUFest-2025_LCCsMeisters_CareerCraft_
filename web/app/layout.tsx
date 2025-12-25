@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SkillSetz - Skill Gap Analysis & Career Roadmap",
+  title: "CareerCraft - AI Career Gap Analyzer",
   description:
-    "Know your skills, find your path. Analyze skill gaps, match with jobs, and get personalized learning roadmaps.",
+    "Know Your Gap. Close Your Gap.",
 }
 
 export default function RootLayout({
