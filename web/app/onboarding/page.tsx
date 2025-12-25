@@ -45,7 +45,7 @@ export default function Onboarding() {
       setUploadSuccess(true);
 
       setTimeout(() => {
-        router.push('/dashboard');
+        router.push("/dashboard/dream-job-streaming")
       }, 1500);
     } catch (err: any) {
       console.error('Upload error:', err);
@@ -60,7 +60,9 @@ export default function Onboarding() {
       <nav className="flex items-center justify-between px-6 py-4 sm:px-12 border-b border-slate-200 dark:border-purple-500/20">
         <Link href="/" className="flex items-center gap-2">
           <Zap className="h-8 w-8 text-purple-600 dark:text-purple-400" />
-          <span className="text-2xl font-bold text-slate-900 dark:text-white">CareerCraft</span>
+          <span className="text-2xl font-bold text-slate-900 dark:text-white">
+            CareerCraft
+          </span>
         </Link>
         <div className="flex items-center gap-4">
           <ModeToggle />
@@ -80,7 +82,8 @@ export default function Onboarding() {
                 Upload Your Resume
               </h2>
               <p className="text-slate-600 dark:text-slate-400">
-                Upload your CV in PDF or DOCX format to build your profile automatically
+                Upload your CV in PDF or DOCX format to build your profile
+                automatically
               </p>
             </div>
 
@@ -101,7 +104,9 @@ export default function Onboarding() {
                 >
                   <FileText className="h-12 w-12 text-slate-400 dark:text-slate-500 mb-4" />
                   <p className="text-lg font-medium text-slate-900 dark:text-white mb-2">
-                    {selectedFile ? selectedFile.name : 'Choose a file or drag it here'}
+                    {selectedFile
+                      ? selectedFile.name
+                      : "Choose a file or drag it here"}
                   </p>
                   <p className="text-sm text-slate-500 dark:text-slate-400">
                     Supported formats: PDF, DOCX (Max 10MB)
@@ -138,8 +143,12 @@ export default function Onboarding() {
                 <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-lg p-4 flex gap-3">
                   <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium text-red-700 dark:text-red-300">Upload Failed</p>
-                    <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+                    <p className="font-medium text-red-700 dark:text-red-300">
+                      Upload Failed
+                    </p>
+                    <p className="text-sm text-red-600 dark:text-red-400">
+                      {error}
+                    </p>
                   </div>
                 </div>
               )}
@@ -185,7 +194,7 @@ export default function Onboarding() {
 
               {/* Skip Button */}
               <Button
-                onClick={() => router.push('/dashboard')}
+                onClick={() => router.push("/dashboard/dream-job-streaming")}
                 disabled={isUploading || uploadSuccess}
                 variant="outline"
                 className="w-full border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
@@ -197,5 +206,5 @@ export default function Onboarding() {
         </div>
       </div>
     </div>
-  );
+  )
 }

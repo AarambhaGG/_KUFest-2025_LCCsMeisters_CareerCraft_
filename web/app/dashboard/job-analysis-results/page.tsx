@@ -142,7 +142,11 @@ export default function JobAnalysisResultsPage() {
       {/* Title Section */}
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-8">
-          <Badge className={`mb-4 ${getEligibilityColor(analysisData.eligibility_level)}`}>
+          <Badge
+            className={`mb-4 ${getEligibilityColor(
+              analysisData.eligibility_level
+            )}`}
+          >
             <Award className="h-3 w-3 mr-1" />
             {analysisData.eligibility_level} Match
           </Badge>
@@ -167,10 +171,16 @@ export default function JobAnalysisResultsPage() {
             <div className="flex items-center gap-6">
               <div className="flex-1">
                 <div className="flex items-baseline gap-2 mb-2">
-                  <span className={`text-5xl font-bold ${getScoreColor(analysisData.match_score)}`}>
+                  <span
+                    className={`text-5xl font-bold ${getScoreColor(
+                      analysisData.match_score
+                    )}`}
+                  >
                     {analysisData.match_score}%
                   </span>
-                  <span className="text-slate-600 dark:text-slate-400">match</span>
+                  <span className="text-slate-600 dark:text-slate-400">
+                    match
+                  </span>
                 </div>
                 <Progress value={analysisData.match_score} className="h-3" />
               </div>
@@ -178,14 +188,17 @@ export default function JobAnalysisResultsPage() {
                 <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                   {analysisData.readiness_percentage}%
                 </p>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Ready</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Ready
+                </p>
               </div>
             </div>
             {analysisData.estimated_preparation_time && (
               <div className="mt-4 flex items-center gap-2 text-slate-600 dark:text-slate-400">
                 <Clock className="h-4 w-4" />
                 <span className="text-sm">
-                  Estimated preparation time: <strong>{analysisData.estimated_preparation_time}</strong>
+                  Estimated preparation time:{" "}
+                  <strong>{analysisData.estimated_preparation_time}</strong>
                 </span>
               </div>
             )}
@@ -220,39 +233,75 @@ export default function JobAnalysisResultsPage() {
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="text-sm text-slate-600 dark:text-slate-400">Overall Skills</span>
-                    <span className={`text-sm font-semibold ${getScoreColor(analysisData.skills_match_score)}`}>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">
+                      Overall Skills
+                    </span>
+                    <span
+                      className={`text-sm font-semibold ${getScoreColor(
+                        analysisData.skills_match_score
+                      )}`}
+                    >
                       {analysisData.skills_match_score}%
                     </span>
                   </div>
-                  <Progress value={analysisData.skills_match_score} className="h-2" />
+                  <Progress
+                    value={analysisData.skills_match_score}
+                    className="h-2"
+                  />
                 </div>
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="text-sm text-slate-600 dark:text-slate-400">Technical Skills</span>
-                    <span className={`text-sm font-semibold ${getScoreColor(analysisData.technical_skills_score)}`}>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">
+                      Technical Skills
+                    </span>
+                    <span
+                      className={`text-sm font-semibold ${getScoreColor(
+                        analysisData.technical_skills_score
+                      )}`}
+                    >
                       {analysisData.technical_skills_score}%
                     </span>
                   </div>
-                  <Progress value={analysisData.technical_skills_score} className="h-2" />
+                  <Progress
+                    value={analysisData.technical_skills_score}
+                    className="h-2"
+                  />
                 </div>
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="text-sm text-slate-600 dark:text-slate-400">Soft Skills</span>
-                    <span className={`text-sm font-semibold ${getScoreColor(analysisData.soft_skills_score)}`}>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">
+                      Soft Skills
+                    </span>
+                    <span
+                      className={`text-sm font-semibold ${getScoreColor(
+                        analysisData.soft_skills_score
+                      )}`}
+                    >
                       {analysisData.soft_skills_score}%
                     </span>
                   </div>
-                  <Progress value={analysisData.soft_skills_score} className="h-2" />
+                  <Progress
+                    value={analysisData.soft_skills_score}
+                    className="h-2"
+                  />
                 </div>
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="text-sm text-slate-600 dark:text-slate-400">Domain Knowledge</span>
-                    <span className={`text-sm font-semibold ${getScoreColor(analysisData.domain_knowledge_score)}`}>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">
+                      Domain Knowledge
+                    </span>
+                    <span
+                      className={`text-sm font-semibold ${getScoreColor(
+                        analysisData.domain_knowledge_score
+                      )}`}
+                    >
                       {analysisData.domain_knowledge_score}%
                     </span>
                   </div>
-                  <Progress value={analysisData.domain_knowledge_score} className="h-2" />
+                  <Progress
+                    value={analysisData.domain_knowledge_score}
+                    className="h-2"
+                  />
                 </div>
               </div>
             </CardContent>
@@ -267,34 +316,63 @@ export default function JobAnalysisResultsPage() {
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="text-sm text-slate-600 dark:text-slate-400">Experience</span>
-                    <span className={`text-sm font-semibold ${getScoreColor(analysisData.experience_match_score)}`}>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">
+                      Experience
+                    </span>
+                    <span
+                      className={`text-sm font-semibold ${getScoreColor(
+                        analysisData.experience_match_score
+                      )}`}
+                    >
                       {analysisData.experience_match_score}%
                     </span>
                   </div>
-                  <Progress value={analysisData.experience_match_score} className="h-2" />
+                  <Progress
+                    value={analysisData.experience_match_score}
+                    className="h-2"
+                  />
                 </div>
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="text-sm text-slate-600 dark:text-slate-400">Education</span>
-                    <span className={`text-sm font-semibold ${getScoreColor(analysisData.education_match_score)}`}>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">
+                      Education
+                    </span>
+                    <span
+                      className={`text-sm font-semibold ${getScoreColor(
+                        analysisData.education_match_score
+                      )}`}
+                    >
                       {analysisData.education_match_score}%
                     </span>
                   </div>
-                  <Progress value={analysisData.education_match_score} className="h-2" />
+                  <Progress
+                    value={analysisData.education_match_score}
+                    className="h-2"
+                  />
                 </div>
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="text-sm text-slate-600 dark:text-slate-400">Culture Fit</span>
-                    <span className={`text-sm font-semibold ${getScoreColor(analysisData.culture_fit_score)}`}>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">
+                      Culture Fit
+                    </span>
+                    <span
+                      className={`text-sm font-semibold ${getScoreColor(
+                        analysisData.culture_fit_score
+                      )}`}
+                    >
                       {analysisData.culture_fit_score}%
                     </span>
                   </div>
-                  <Progress value={analysisData.culture_fit_score} className="h-2" />
+                  <Progress
+                    value={analysisData.culture_fit_score}
+                    className="h-2"
+                  />
                 </div>
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="text-sm text-slate-600 dark:text-slate-400">Confidence Level</span>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">
+                      Confidence Level
+                    </span>
                     <span className="text-sm font-semibold text-purple-600 dark:text-purple-400">
                       {analysisData.confidence_level}
                     </span>
@@ -318,12 +396,17 @@ export default function JobAnalysisResultsPage() {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
-                  {parseListString(analysisData.strengths).map((strength, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-slate-700 dark:text-slate-300">
-                      <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
-                      <span className="text-sm">{strength}</span>
-                    </li>
-                  ))}
+                  {parseListString(analysisData.strengths).map(
+                    (strength, idx) => (
+                      <li
+                        key={idx}
+                        className="flex items-start gap-2 text-slate-700 dark:text-slate-300"
+                      >
+                        <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
+                        <span className="text-sm">{strength}</span>
+                      </li>
+                    )
+                  )}
                 </ul>
               </CardContent>
             </Card>
@@ -341,7 +424,10 @@ export default function JobAnalysisResultsPage() {
               <CardContent>
                 <ul className="space-y-2">
                   {parseListString(analysisData.gaps).map((gap, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-slate-700 dark:text-slate-300">
+                    <li
+                      key={idx}
+                      className="flex items-start gap-2 text-slate-700 dark:text-slate-300"
+                    >
                       <XCircle className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
                       <span className="text-sm">{gap}</span>
                     </li>
@@ -365,11 +451,16 @@ export default function JobAnalysisResultsPage() {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {parseListString(analysisData.matching_skills).map((skill, idx) => (
-                    <Badge key={idx} className="bg-green-100 dark:bg-green-950 text-green-700 dark:text-green-300">
-                      {skill}
-                    </Badge>
-                  ))}
+                  {parseListString(analysisData.matching_skills).map(
+                    (skill, idx) => (
+                      <Badge
+                        key={idx}
+                        className="bg-green-100 dark:bg-green-950 text-green-700 dark:text-green-300"
+                      >
+                        {skill}
+                      </Badge>
+                    )
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -386,11 +477,16 @@ export default function JobAnalysisResultsPage() {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {parseListString(analysisData.missing_skills).map((skill, idx) => (
-                    <Badge key={idx} className="bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300">
-                      {skill}
-                    </Badge>
-                  ))}
+                  {parseListString(analysisData.missing_skills).map(
+                    (skill, idx) => (
+                      <Badge
+                        key={idx}
+                        className="bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300"
+                      >
+                        {skill}
+                      </Badge>
+                    )
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -408,12 +504,19 @@ export default function JobAnalysisResultsPage() {
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
-                {parseListString(analysisData.recommendations).map((rec, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-slate-700 dark:text-slate-300">
-                    <span className="text-blue-600 dark:text-blue-400 font-semibold shrink-0">{idx + 1}.</span>
-                    <span>{rec}</span>
-                  </li>
-                ))}
+                {parseListString(analysisData.recommendations).map(
+                  (rec, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-2 text-slate-700 dark:text-slate-300"
+                    >
+                      <span className="text-blue-600 dark:text-blue-400 font-semibold shrink-0">
+                        {idx + 1}.
+                      </span>
+                      <span>{rec}</span>
+                    </li>
+                  )
+                )}
               </ul>
             </CardContent>
           </Card>
@@ -435,7 +538,9 @@ export default function JobAnalysisResultsPage() {
                     <div className="flex items-center justify-center w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-semibold text-sm shrink-0">
                       {idx + 1}
                     </div>
-                    <p className="text-slate-700 dark:text-slate-300 pt-0.5">{step}</p>
+                    <p className="text-slate-700 dark:text-slate-300 pt-0.5">
+                      {step}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -454,12 +559,19 @@ export default function JobAnalysisResultsPage() {
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {parseListString(analysisData.priority_improvements).map((improvement, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-slate-700 dark:text-slate-300">
-                    <span className="text-orange-600 dark:text-orange-400 font-semibold shrink-0">•</span>
-                    <span>{improvement}</span>
-                  </li>
-                ))}
+                {parseListString(analysisData.priority_improvements).map(
+                  (improvement, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-2 text-slate-700 dark:text-slate-300"
+                    >
+                      <span className="text-orange-600 dark:text-orange-400 font-semibold shrink-0">
+                        •
+                      </span>
+                      <span>{improvement}</span>
+                    </li>
+                  )
+                )}
               </ul>
             </CardContent>
           </Card>
@@ -484,7 +596,7 @@ export default function JobAnalysisResultsPage() {
 
         {/* Action Buttons */}
         <div className="flex gap-4 justify-center">
-          <Link href="/dashboard">
+          <Link href="/dashboard/dream-job-streaming">
             <Button variant="outline" size="lg">
               Back to Dashboard
             </Button>
@@ -498,5 +610,5 @@ export default function JobAnalysisResultsPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }
