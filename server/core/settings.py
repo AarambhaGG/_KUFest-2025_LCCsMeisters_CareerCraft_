@@ -184,8 +184,8 @@ CORS_ALLOW_CREDENTIALS = True
 
 # drf-spectacular Settings
 SPECTACULAR_SETTINGS = {
-    "TITLE": "SkillSetz API",
-    "DESCRIPTION": "API for SkillSetz - AI-powered skill development and career growth platform",
+    "TITLE": "CareerCraft API",
+    "DESCRIPTION": "API for CareerCraft - AI-powered skill development and career growth platform",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "SCHEMA_PATH_PREFIX": "/api/",
