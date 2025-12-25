@@ -9,8 +9,7 @@ import {
   FolderGit2,
   Award,
   Code,
-  User,
-  MessageSquare
+  User
 } from 'lucide-react';
 import { EducationSection } from '@/components/settings/EducationSection';
 import { ExperienceSection } from '@/components/settings/ExperienceSection';
@@ -18,7 +17,6 @@ import { ProjectsSection } from '@/components/settings/ProjectsSection';
 import { CertificationsSection } from '@/components/settings/CertificationsSection';
 import { SkillsSection } from '@/components/settings/SkillsSection';
 import { BasicInfoSection } from '@/components/settings/BasicInfoSection';
-import { ProfileChat } from '@/components/ProfileChat';
 
 export default function SettingsPage() {
   return (
@@ -35,7 +33,7 @@ export default function SettingsPage() {
 
       {/* Tabs */}
       <Tabs defaultValue="basic" className="w-full">
-        <TabsList className="grid w-full grid-cols-7 lg:w-auto lg:inline-flex">
+        <TabsList className="grid w-full grid-cols-6 lg:w-auto lg:inline-flex">
           <TabsTrigger value="basic" className="flex items-center gap-2">
             <User className="h-4 w-4" />
             <span className="hidden sm:inline">Basic Info</span>
@@ -59,10 +57,6 @@ export default function SettingsPage() {
           <TabsTrigger value="skills" className="flex items-center gap-2">
             <Code className="h-4 w-4" />
             <span className="hidden sm:inline">Skills</span>
-          </TabsTrigger>
-          <TabsTrigger value="ai-chat" className="flex items-center gap-2">
-            <MessageSquare className="h-4 w-4" />
-            <span className="hidden sm:inline">AI Career Chat</span>
           </TabsTrigger>
         </TabsList>
 
@@ -88,10 +82,6 @@ export default function SettingsPage() {
 
         <TabsContent value="skills" className="mt-6">
           <SkillsSection />
-        </TabsContent>
-
-        <TabsContent value="ai-chat" className="mt-6">
-          <ProfileChat />
         </TabsContent>
       </Tabs>
     </div>
