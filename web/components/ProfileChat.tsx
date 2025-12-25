@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Send, User, Bot, Loader2 } from 'lucide-react';
-import { chatAboutAnalysis } from '@/api';
+import { chatAboutProfile } from '@/api';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -12,16 +12,11 @@ interface Message {
   timestamp: Date;
 }
 
-interface AnalysisChatProps {
-  analysisId: number;
-  initialContext?: string;
-}
-
-export function AnalysisChat({ analysisId, initialContext }: AnalysisChatProps) {
+export function ProfileChat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: "Hi! I've analyzed your profile against this job. What would you like to know more about? I can help you understand:\n\n• Why certain skills are gaps\n• How to prioritize your learning\n• Specific next steps for improvement\n• Timeline to become job-ready\n• Alternative career paths\n\nWhat's on your mind?",
+      content: "Hi! I'm your AI career advisor. I can help you with:\n\n• Reviewing your resume and profile\n• Suggesting skills to learn next\n• Career path recommendations\n• Interview preparation tips\n• Job search strategies\n\nWhat would you like to discuss?",
       timestamp: new Date(),
     },
   ]);
@@ -51,7 +46,7 @@ export function AnalysisChat({ analysisId, initialContext }: AnalysisChatProps) 
     setIsLoading(true);
 
     try {
-      const response = await chatAboutAnalysis(analysisId, input);
+      const response = await chatAboutProfile(input);
 
       const assistantMessage: Message = {
         role: 'assistant',
@@ -83,10 +78,10 @@ export function AnalysisChat({ analysisId, initialContext }: AnalysisChatProps) 
   };
 
   const quickQuestions = [
-    "What should I focus on first?",
-    "How long will it take to be job-ready?",
-    "What are the most important skills to learn?",
-    "Can you explain my skill gaps in detail?",
+    "What are my strongest skills?",
+    "How can I improve my resume?",
+    "What skills should I learn next?",
+    "What jobs should I apply for?",
   ];
 
   const handleQuickQuestion = (question: string) => {
@@ -98,7 +93,7 @@ export function AnalysisChat({ analysisId, initialContext }: AnalysisChatProps) 
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-          Ask Questions About Your Analysis
+          Chat About Your Career
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -194,7 +189,7 @@ export function AnalysisChat({ analysisId, initialContext }: AnalysisChatProps) 
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Ask anything about your analysis..."
+              placeholder="Ask anything about your career or resume..."
               className="flex-1 p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
               rows={3}
               disabled={isLoading}

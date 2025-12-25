@@ -733,3 +733,148 @@ Return ONLY the JSON object, no additional text.
         return self.analyze_eligibility(
             user=analysis.user, job=analysis.job, additional_context=combined_context
         )
+
+
+class AnalysisChatService:
+    """
+    Service for AI-powered chat about job analysis results
+    """
+
+    def __init__(self):
+        """Initialize chat service with GPT-4"""
+        model_provider = os.getenv("MODEL_PROVIDER")
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError("OPENAI_API_KEY environment variable not set")
+
+        gemini_model = "gemini-2.0-flash-exp"
+        openai_model = "gpt-4o"
+
+        if model_provider == "gemini":
+            gemini_api_key = os.getenv("GEMINI_API_KEY")
+            self.llm = ChatGoogleGenerativeAI(model=gemini_model, api_key=gemini_api_key)
+        else:
+            self.llm = ChatOpenAI(
+                model=openai_model,
+                temperature=0.7,  # Slightly higher for more conversational responses
+                api_key=api_key,
+            )
+
+    def _format_analysis_context(self, analysis: JobEligibilityAnalysis) -> str:
+        """Format analysis data into context for AI"""
+        context_parts = []
+
+        # Job Details
+        job = analysis.job
+        context_parts.append(f"Job Title: {job.title}")
+        context_parts.append(f"Company: {job.company_name}")
+        context_parts.append(f"Experience Level: {job.experience_level}")
+        if job.description:
+            context_parts.append(f"\nJob Description:\n{job.description[:500]}")
+
+        # Analysis Results
+        context_parts.append(f"\n=== ANALYSIS RESULTS ===")
+        context_parts.append(f"Eligibility Level: {analysis.eligibility_level}")
+        context_parts.append(f"Match Score: {analysis.match_score}/100")
+        context_parts.append(f"\nSummary:\n{analysis.analysis_summary}")
+
+        # Strengths
+        if analysis.strengths:
+            context_parts.append("\nStrengths:")
+            for strength in analysis.strengths:
+                if isinstance(strength, dict):
+                    context_parts.append(f"  - {strength.get('title', '')}: {strength.get('description', '')}")
+                else:
+                    context_parts.append(f"  - {strength}")
+
+        # Skill Gaps
+        if analysis.gaps:
+            context_parts.append("\nSkill Gaps:")
+            for gap in analysis.gaps:
+                if isinstance(gap, dict):
+                    context_parts.append(f"  - {gap.get('skill', '')}: {gap.get('description', '')}")
+                else:
+                    context_parts.append(f"  - {gap}")
+
+        # Matching Skills
+        if analysis.matching_skills:
+            context_parts.append("\nMatching Skills:")
+            for skill in analysis.matching_skills[:10]:  # Limit to first 10
+                if isinstance(skill, dict):
+                    context_parts.append(f"  - {skill.get('name', skill)}")
+                else:
+                    context_parts.append(f"  - {skill}")
+
+        # Missing Skills
+        if analysis.missing_skills:
+            context_parts.append("\nMissing Skills:")
+            for skill in analysis.missing_skills[:10]:  # Limit to first 10
+                if isinstance(skill, dict):
+                    context_parts.append(f"  - {skill.get('name', skill)}")
+                else:
+                    context_parts.append(f"  - {skill}")
+
+        # Recommendations
+        if analysis.recommendations:
+            context_parts.append("\nRecommendations:")
+            for rec in analysis.recommendations:
+                if isinstance(rec, dict):
+                    context_parts.append(f"  - {rec.get('title', '')}: {rec.get('description', '')}")
+                else:
+                    context_parts.append(f"  - {rec}")
+
+        # Next Steps
+        if analysis.next_steps:
+            context_parts.append("\nNext Steps:")
+            for step in analysis.next_steps[:5]:  # Limit to first 5
+                if isinstance(step, dict):
+                    context_parts.append(f"  - {step.get('description', step)}")
+                else:
+                    context_parts.append(f"  - {step}")
+
+        # Timeline
+        if analysis.estimated_preparation_time:
+            context_parts.append(f"\nEstimated Preparation Time: {analysis.estimated_preparation_time}")
+
+        return "\n".join(context_parts)
+
+    def chat_about_analysis(self, analysis: JobEligibilityAnalysis, message: str) -> str:
+        """
+        Generate AI response about a job analysis
+
+        Args:
+            analysis: JobEligibilityAnalysis object
+            message: User's question/message
+
+        Returns:
+            AI-generated response
+        """
+        # Format analysis context
+        analysis_context = self._format_analysis_context(analysis)
+
+        # Create chat prompt
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", """You are a helpful career advisor for CareerCraft, specializing in job eligibility analysis.
+
+You help users understand their job analysis results and provide actionable career advice.
+
+Be conversational, supportive, and specific. Reference the actual data from their analysis.
+Provide concrete, actionable recommendations.
+
+If asked about timelines, use the estimated preparation time from the analysis.
+If asked about skills, prioritize based on the gaps and recommendations in the analysis.
+
+Analysis Context:
+{analysis_context}
+"""),
+            ("human", "{message}"),
+        ])
+
+        # Generate response
+        chain = prompt | self.llm
+        result = chain.invoke({
+            "analysis_context": analysis_context,
+            "message": message,
+        })
+
+        return result.content

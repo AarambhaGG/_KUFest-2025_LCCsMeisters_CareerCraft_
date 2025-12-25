@@ -19,7 +19,7 @@ from .serializers import (
     AnalyzeJobEligibilitySerializer,
     ReanalyzeJobEligibilitySerializer,
 )
-from .services import JobEligibilityAnalyzer, DreamJobParser
+from .services import JobEligibilityAnalyzer, DreamJobParser, AnalysisChatService
 from .streaming_services import StreamingJobAnalyzer
 
 
@@ -363,6 +363,79 @@ class JobEligibilityAnalysisViewSet(viewsets.ReadOnlyModelViewSet):
             stats['average_match_score'] = round(avg_score, 2) if avg_score else 0
 
         return Response(stats)
+
+    @extend_schema(
+        tags=['Job Analysis'],
+        summary='Chat about job analysis',
+        description='Ask questions about a specific job analysis and get AI-powered answers',
+        request={
+            'application/json': {
+                'type': 'object',
+                'properties': {
+                    'analysis_id': {
+                        'type': 'integer',
+                        'description': 'ID of the job analysis to chat about',
+                    },
+                    'message': {
+                        'type': 'string',
+                        'description': 'User question about the analysis',
+                    },
+                },
+                'required': ['analysis_id', 'message'],
+            }
+        },
+    )
+    @action(detail=False, methods=['post'])
+    def chat(self, request):
+        """
+        Chat with AI about a specific job analysis
+
+        Ask questions like:
+        - "What should I focus on first?"
+        - "How long will it take to be job-ready?"
+        - "What are the most important skills to learn?"
+        - "Can you explain my skill gaps in detail?"
+        """
+        analysis_id = request.data.get('analysis_id')
+        message = request.data.get('message')
+
+        if not analysis_id or not message:
+            return Response(
+                {'error': 'analysis_id and message are required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            # Get analysis
+            analysis = JobEligibilityAnalysis.objects.get(
+                id=analysis_id,
+                user=request.user
+            )
+
+            # Initialize chat service
+            chat_service = AnalysisChatService()
+
+            # Get response from AI
+            response = chat_service.chat_about_analysis(
+                analysis=analysis,
+                message=message
+            )
+
+            return Response({
+                'message': message,
+                'response': response,
+            }, status=status.HTTP_200_OK)
+
+        except JobEligibilityAnalysis.DoesNotExist:
+            return Response(
+                {'error': 'Analysis not found or you do not have permission to access it'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Chat failed: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     @extend_schema(
         tags=['Job Analysis'],

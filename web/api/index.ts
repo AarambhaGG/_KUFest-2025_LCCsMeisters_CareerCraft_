@@ -287,3 +287,22 @@ export const deleteCertification = async (id: string) => {
   const { data } = await axiosInstance.delete(`/profiles/certifications/${id}/`);
   return data;
 };
+
+// Profile Chat API
+export const chatAboutProfile = async (message: string) => {
+  const { data } = await axiosInstance.post("/profiles/profile/chat/", { message }, {
+    timeout: 120000, // 2 minutes for AI processing
+  });
+  return data;
+};
+
+// Analysis Chat API
+export const chatAboutAnalysis = async (analysisId: number, message: string) => {
+  const { data } = await axiosInstance.post("/jobs/analyses/chat/", {
+    analysis_id: analysisId,
+    message
+  }, {
+    timeout: 120000, // 2 minutes for AI processing
+  });
+  return data;
+};

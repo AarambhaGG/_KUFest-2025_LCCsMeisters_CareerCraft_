@@ -691,3 +691,141 @@ class ProfileBuilderService:
                 + len(user_skills)
             ),
         }
+
+
+class ProfileChatService:
+    """
+    Service for AI-powered chat about user profile and career
+    """
+
+    def __init__(self):
+        """Initialize chat service with GPT-4"""
+        model_provider = os.getenv("MODEL_PROVIDER")
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError("OPENAI_API_KEY environment variable not set")
+
+        gemini_model = "gemini-2.0-flash-exp"
+        openai_model = "gpt-4o"
+
+        if model_provider == "gemini":
+            gemini_api_key = os.getenv("GEMINI_API_KEY")
+            self.llm = ChatGoogleGenerativeAI(model=gemini_model, api_key=gemini_api_key)
+        else:
+            self.llm = ChatOpenAI(
+                model=openai_model,
+                temperature=0.7,  # Slightly higher for more conversational responses
+                api_key=api_key,
+            )
+
+    def _format_profile_context(self, user, profile) -> str:
+        """Format user profile data into context for AI"""
+        context_parts = []
+
+        # Basic info
+        context_parts.append(f"User: {user.first_name} {user.last_name}")
+        if user.email:
+            context_parts.append(f"Email: {user.email}")
+
+        # Profile details
+        if profile.bio:
+            context_parts.append(f"\nBio: {profile.bio}")
+        if profile.current_title:
+            context_parts.append(f"Current Title: {profile.current_title}")
+        if profile.current_company:
+            context_parts.append(f"Current Company: {profile.current_company}")
+        if profile.career_goal:
+            context_parts.append(f"Career Goal: {profile.career_goal}")
+        if profile.years_of_experience:
+            context_parts.append(f"Years of Experience: {profile.years_of_experience}")
+
+        # Education
+        education = profile.education_records.all()
+        if education:
+            context_parts.append("\nEducation:")
+            for edu in education:
+                context_parts.append(
+                    f"  - {edu.degree} in {edu.field_of_study or 'N/A'} from {edu.institution} ({edu.start_date.year}-{edu.end_date.year if edu.end_date else 'Present'})"
+                )
+
+        # Work Experience
+        work_exp = profile.work_experiences.all().order_by('-start_date')
+        if work_exp:
+            context_parts.append("\nWork Experience:")
+            for work in work_exp:
+                end_year = work.end_date.year if work.end_date else "Present"
+                context_parts.append(
+                    f"  - {work.job_title} at {work.company} ({work.start_date.year}-{end_year})"
+                )
+                if work.description:
+                    context_parts.append(f"    {work.description[:200]}")
+
+        # Projects
+        projects = profile.projects.all()
+        if projects:
+            context_parts.append("\nProjects:")
+            for proj in projects:
+                tech = ", ".join(proj.technologies_used) if proj.technologies_used else "N/A"
+                context_parts.append(f"  - {proj.title} ({proj.project_type})")
+                context_parts.append(f"    Technologies: {tech}")
+
+        # Certifications
+        certs = profile.certifications.all()
+        if certs:
+            context_parts.append("\nCertifications:")
+            for cert in certs:
+                context_parts.append(
+                    f"  - {cert.name} from {cert.issuing_organization} (Issued: {cert.issue_date})"
+                )
+
+        # Skills
+        try:
+            from apps.skills.models import UserSkill
+            user_skills = UserSkill.objects.filter(user=user).select_related('skill')
+            if user_skills:
+                context_parts.append("\nSkills:")
+                for us in user_skills:
+                    context_parts.append(f"  - {us.skill.name} ({us.proficiency_level})")
+        except:
+            pass
+
+        return "\n".join(context_parts)
+
+    def chat_about_profile(self, user, profile, message: str) -> str:
+        """
+        Generate AI response about user's profile
+
+        Args:
+            user: Django User object
+            profile: UserProfile object
+            message: User's question/message
+
+        Returns:
+            AI-generated response
+        """
+        # Format profile context
+        profile_context = self._format_profile_context(user, profile)
+
+        # Create chat prompt
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", """You are a helpful career advisor and resume expert for CareerCraft.
+You help users understand their profile, improve their resume, and make career decisions.
+
+Be conversational, supportive, and provide actionable advice. Use the user's profile data to give personalized recommendations.
+
+If the user's profile is incomplete, gently suggest what they should add to strengthen their profile.
+
+User Profile Data:
+{profile_context}
+"""),
+            ("human", "{message}"),
+        ])
+
+        # Generate response
+        chain = prompt | self.llm
+        result = chain.invoke({
+            "profile_context": profile_context,
+            "message": message,
+        })
+
+        return result.content

@@ -23,7 +23,7 @@ from .serializers import (
     CertificationSerializer,
     CompleteProfileSerializer,
 )
-from .services import ResumeParserService, ProfileBuilderService
+from .services import ResumeParserService, ProfileBuilderService, ProfileChatService
 
 
 @extend_schema_view(
@@ -312,6 +312,67 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response(
                 {'error': f'Onboarding failed: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    @extend_schema(
+        tags=['Profile'],
+        summary='Chat about profile and resume',
+        description='Ask questions about your profile, get career advice, and receive personalized recommendations',
+        request={
+            'application/json': {
+                'type': 'object',
+                'properties': {
+                    'message': {
+                        'type': 'string',
+                        'description': 'User message/question about their profile',
+                    },
+                },
+                'required': ['message'],
+            }
+        },
+    )
+    @action(detail=False, methods=['post'])
+    def chat(self, request):
+        """
+        Chat with AI about your profile and resume
+
+        Ask questions like:
+        - "What are my strongest skills?"
+        - "How can I improve my resume?"
+        - "What jobs should I apply for?"
+        - "What skills should I learn next?"
+        """
+        message = request.data.get('message')
+
+        if not message:
+            return Response(
+                {'error': 'message is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            # Get or create user profile
+            profile, created = UserProfile.objects.get_or_create(user=request.user)
+
+            # Initialize chat service
+            chat_service = ProfileChatService()
+
+            # Get response from AI
+            response = chat_service.chat_about_profile(
+                user=request.user,
+                profile=profile,
+                message=message
+            )
+
+            return Response({
+                'message': message,
+                'response': response,
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response(
+                {'error': f'Chat failed: {str(e)}'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
