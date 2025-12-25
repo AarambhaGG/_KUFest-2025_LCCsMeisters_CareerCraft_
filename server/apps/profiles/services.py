@@ -348,13 +348,16 @@ class ProfileBuilderService:
         Parse date string and convert to YYYY-MM-DD format
 
         Args:
-            date_str: Date string in YYYY-MM or YYYY-MM-DD format
+            date_str: Date string in YYYY, YYYY-MM or YYYY-MM-DD format
 
         Returns:
             Date string in YYYY-MM-DD format
         """
         if not date_str:
             return None
+
+        # Convert to string and strip whitespace
+        date_str = str(date_str).strip()
 
         # If already in YYYY-MM-DD format, return as is
         if len(date_str) == 10:
@@ -363,6 +366,10 @@ class ProfileBuilderService:
         # If in YYYY-MM format, append -01
         if len(date_str) == 7:
             return f"{date_str}-01"
+
+        # If in YYYY format (just year), append -01-01
+        if len(date_str) == 4 and date_str.isdigit():
+            return f"{date_str}-01-01"
 
         # Default fallback
         return date_str
@@ -423,12 +430,17 @@ class ProfileBuilderService:
 
         for work_data in self.parsed_data.get("work_experience", []):
             try:
+                # Ensure location is never None
+                location = work_data.get("location") or ""
+                if location is None:
+                    location = ""
+
                 work_exp = WorkExperience.objects.create(
                     profile=profile,
                     job_title=work_data.get("job_title", ""),
                     company=work_data.get("company", ""),
                     employment_type=work_data.get("employment_type", "FULL_TIME"),
-                    location=work_data.get("location", ""),
+                    location=location,
                     is_remote=work_data.get("is_remote", False),
                     start_date=self._parse_date(work_data.get("start_date")) or "2000-01-01",
                     end_date=self._parse_date(work_data.get("end_date")),
@@ -481,14 +493,27 @@ class ProfileBuilderService:
 
         for proj_data in self.parsed_data.get("projects", []):
             try:
+                # Ensure URLs are never None
+                project_url = proj_data.get("project_url") or ""
+                github_url = proj_data.get("github_url") or ""
+                demo_url = proj_data.get("demo_url") or ""
+
+                if project_url is None:
+                    project_url = ""
+                if github_url is None:
+                    github_url = ""
+                if demo_url is None:
+                    demo_url = ""
+
                 project = Project.objects.create(
                     profile=profile,
                     title=proj_data.get("title", ""),
                     project_type=proj_data.get("project_type", "PERSONAL"),
                     description=proj_data.get("description", ""),
                     technologies_used=proj_data.get("technologies_used", []),
-                    project_url=proj_data.get("project_url", ""),
-                    github_url=proj_data.get("github_url", ""),
+                    project_url=project_url,
+                    github_url=github_url,
+                    demo_url=demo_url,
                     start_date=self._parse_date(proj_data.get("start_date")) or "2000-01-01",
                     end_date=self._parse_date(proj_data.get("end_date")),
                     is_ongoing=proj_data.get("is_ongoing", False),

@@ -39,6 +39,7 @@ class DreamJobParser:
 
         gemini_model = "gemini-3-flash-preview"
         openai_model = "gpt-4o-mini"
+        print("model provider", model_provider)
 
         if model_provider == "gemini":
             gemini_api_key = os.getenv("GEMINI_API_KEY")
@@ -217,19 +218,37 @@ class JobEligibilityAnalyzer:
     LangChain-based service for analyzing user eligibility for job postings
     """
 
-    def __init__(self, model_name: str = "gpt-4"):
+    def __init__(self, model_name: str = None):
         """
         Initialize the analyzer with specified LLM model
 
         Args:
-            model_name: OpenAI model to use (default: gpt-4)
+            model_name: Model to use (default: auto-detect based on MODEL_PROVIDER)
         """
-        self.model_name = model_name
-        self.llm = ChatOpenAI(
-            model=model_name,
-            temperature=0.3,  # Lower temperature for more consistent analysis
-            openai_api_key=os.getenv("OPENAI_API_KEY"),
-        )
+        model_provider = os.getenv("MODEL_PROVIDER")
+
+        if model_provider == "gemini":
+            # Use Gemini
+            gemini_api_key = os.getenv("GEMINI_API_KEY")
+            if not gemini_api_key:
+                raise ValueError("GEMINI_API_KEY environment variable not set")
+            self.model_name = "gemini-3-flash-preview" or model_name 
+            self.llm = ChatGoogleGenerativeAI(
+                model=self.model_name,
+                temperature=0.3,
+                api_key=gemini_api_key,
+            )
+        else:
+            # Use OpenAI
+            openai_api_key = os.getenv("OPENAI_API_KEY")
+            if not openai_api_key:
+                raise ValueError("OPENAI_API_KEY environment variable not set")
+            self.model_name = model_name or "gpt-4o-mini"
+            self.llm = ChatOpenAI(
+                model=self.model_name,
+                temperature=0.3,  # Lower temperature for more consistent analysis
+                openai_api_key=openai_api_key,
+            )
 
     def _gather_user_context(self, user: User) -> Dict[str, Any]:
         """
